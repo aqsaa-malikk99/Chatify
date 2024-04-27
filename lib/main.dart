@@ -146,7 +146,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.pinkAccent,
         ),
         child: const Center(child: Text("Chatify",style: TextStyle(color: Colors.white,fontSize: 22),)),

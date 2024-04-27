@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this
+
 import 'package:chatify/src/services/encryption/encryption_service_contract.dart';
 import 'package:encrypt/encrypt.dart';
 

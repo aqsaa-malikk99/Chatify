@@ -50,7 +50,7 @@ void main() {
   });
 
   test('sucessfully subscribe and receive messages', () async {
-    final contents='this is an another message';
+    const contents='this is an another message';
     sut!.messages(activeUser: user2).listen(expectAsync1((message) {
           expect(message.to, user2.id);
           expect(message.id, isNotEmpty);

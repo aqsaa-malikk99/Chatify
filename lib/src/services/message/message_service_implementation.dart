@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chatify/src/helper/logger.dart';
 import 'package:chatify/src/models/message.dart';
 import 'package:chatify/src/models/user.dart';
 import 'package:chatify/src/services/encryption/encryption_service_contract.dart';
@@ -52,8 +53,8 @@ class MessageService implements IMessageService {
                 _controller.sink.add(message);
                 _removeDeliveredMessage(message);
               })
-              .catchError((err, stackTrace) => print(err))
-              .onError((error, stackTrace) => print(error));
+              .catchError((err, stackTrace) => Log.print(err))
+              .onError((error, stackTrace) => Log.print(error));
         });
   }
 
@@ -66,8 +67,8 @@ class MessageService implements IMessageService {
 
   _removeDeliveredMessage(Message message) {
     r
-        .table('message')
+        .table('messages')
         .get(message.id)
-        .delete({'return_changes': 'false'}).run(_connection);
+        .delete({'return_changes': false}).run(_connection);
   }
 }

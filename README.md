@@ -47,3 +47,18 @@ This App includes
 - The stream subscribe method is checked by using user2 feed and listen to its feedchanges and we expect that the stream changes will show that message.to param have user2.id and is the message id param is not empty 
 - after that we send the two messages
 
+## Episode 3 of Youtube tutorial
+### Explanation
+- We created a service `encryption`
+- `Encryption` --> was to encrypt data incoming and outgoing just like whatsapp we encrypt our data so that it doesnt saves on the server
+  - For that we created two methods`encrypt` and `decrypt`
+  - Encrypt data uses base64 and implemented this method inside send 
+  - Decrypt data decrypts base64 message into plain text we used it insdie the message service where we are subscribing to the stream
+## Episode 3 of Youtube tutorial
+### Explanation
+- We created two services 1 `Receipt` 2  `Typing Notification` 
+- `Receipt` --> Its status of the message whether its  sent, delivered, read 
+  - we created a model class depicting the table schema and having enum to ensure the status remain constant 
+  - we then created service which had the methods to insert the status for that message and check the incoming status for message
+-  `Typing Notification`  --> to give out typing notiifcation for the user whether it is `started` or `stopped`
+  - Similarly to receipt we created exact same notification
