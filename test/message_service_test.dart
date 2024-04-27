@@ -1,7 +1,9 @@
 import 'package:chatify/src/models/message.dart';
 import 'package:chatify/src/models/user.dart';
+import 'package:chatify/src/services/encryption/encryption_service_implementation.dart';
 import 'package:chatify/src/services/message/message_service_implementation.dart';
-import 'package:flutter/material.dart';
+import 'package:encrypt/encrypt.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rethink_db_ns/rethink_db_ns.dart';
 
@@ -30,8 +32,9 @@ void main() {
 
   setUp(() async {
     connection = await r.connect(host: '127.0.0.1', port: 28015);
+    final encryption=EncryptedService(Encrypter(AES(Key.fromLength(32))));
     await createDb(r, connection!);
-    sut = MessageService(r, connection!);
+    sut = MessageService(r, connection!,encryption);
   });
   tearDown(() async {
     await cleanDB(r, connection!);
@@ -47,22 +50,24 @@ void main() {
   });
 
   test('sucessfully subscribe and receive messages', () async {
+    final contents='this is an another message';
     sut!.messages(activeUser: user2).listen(expectAsync1((message) {
           expect(message.to, user2.id);
           expect(message.id, isNotEmpty);
+          expect(message.contents, contents);
         }, count: 2));
 
     Message message = Message(
         from: user1.id!,
         to: user2.id!,
         timestamp: DateTime.now(),
-        contents: 'this is a message');
+        contents: contents);
     Message secondMessage = Message(
         from: user1.id!,
         to: user2.id!,
         timestamp: DateTime.now(),
-        contents: 'this is an another message');
+        contents: contents);
     await sut!.send(message);
-    await sut!.send(message);
+    await sut!.send(secondMessage);
   });
 }
