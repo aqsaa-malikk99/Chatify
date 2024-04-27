@@ -1,5 +1,6 @@
-import 'package:chatify/src/services/encryption/encryption_service_contract.dart';
-import 'package:chatify/src/services/encryption/encryption_service_implementation.dart';
+import 'package:chat/src/services/encryption/encryption_service_contract.dart';
+import 'package:chat/src/services/encryption/encryption_service_implementation.dart';
+
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter_test/flutter_test.dart';
 

@@ -1,4 +1,4 @@
-import 'package:chatify/src/models/user.dart';
+import 'package:chat/src/models/user.dart';
 
 import '../../models/message.dart';
 

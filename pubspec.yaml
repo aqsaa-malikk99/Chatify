@@ -17,8 +17,7 @@ dependencies:
 
 
   cupertino_icons: ^1.0.8
-  rethink_db_ns: ^0.0.4
-  encrypt: 5.0.3
+
 
 dev_dependencies:
   flutter_test:

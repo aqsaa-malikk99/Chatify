@@ -1,13 +1,15 @@
-import 'package:chatify/src/models/message.dart';
-import 'package:chatify/src/models/user.dart';
-import 'package:chatify/src/services/encryption/encryption_service_implementation.dart';
-import 'package:chatify/src/services/message/message_service_implementation.dart';
+import 'package:chat/src/models/message.dart';
+import 'package:chat/src/models/user.dart';
+import 'package:chat/src/services/encryption/encryption_service_implementation.dart';
+import 'package:chat/src/services/message/message_service_implementation.dart';
 import 'package:encrypt/encrypt.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rethink_db_ns/rethink_db_ns.dart';
 
 import 'helpers.dart';
+
+
 
 void main() {
   RethinkDb r = RethinkDb();

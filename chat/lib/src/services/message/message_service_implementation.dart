@@ -1,11 +1,13 @@
 import 'dart:async';
 
-import 'package:chatify/src/helper/logger.dart';
-import 'package:chatify/src/models/message.dart';
-import 'package:chatify/src/models/user.dart';
-import 'package:chatify/src/services/encryption/encryption_service_contract.dart';
-import 'package:chatify/src/services/message/message_service_contract.dart';
+
 import 'package:rethink_db_ns/rethink_db_ns.dart';
+
+import '../../helper/logger.dart';
+import '../../models/message.dart';
+import '../../models/user.dart';
+import '../encryption/encryption_service_contract.dart';
+import 'message_service_contract.dart';
 
 class MessageService implements IMessageService {
   final Connection _connection;

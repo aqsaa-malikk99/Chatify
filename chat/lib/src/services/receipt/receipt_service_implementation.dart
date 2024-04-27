@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:chatify/src/models/receipt.dart';
-import 'package:chatify/src/models/user.dart';
-import 'package:chatify/src/services/receipt/receipt_service_contract.dart';
+import 'package:chat/src/models/receipt.dart';
+import 'package:chat/src/models/user.dart';
+import 'package:chat/src/services/receipt/receipt_service_contract.dart';
 import 'package:rethink_db_ns/rethink_db_ns.dart';
 
 import '../../helper/logger.dart';

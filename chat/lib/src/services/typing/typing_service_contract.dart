@@ -1,6 +1,6 @@
 // ignore_for_file: unused_import
 
-import 'package:chatify/src/models/typing_event.dart';
+import 'package:chat/src/models/typing_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
