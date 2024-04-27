@@ -21,7 +21,7 @@ class User {
       username: json['username'],
       photoUrl: json['photoUrl'], // Corrected typo
       active: json['active'],
-      lastseen: DateTime.parse(json['lastseen']), // Assuming lastseen is a date string
+      lastseen: json['lastseen'], // Assuming lastseen is a date string
     ).._id = json['id']; // Setting the private _id variable
   }
 
