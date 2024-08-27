@@ -1,64 +1,86 @@
-# chatify
-##chat daily
-This App includes
-- Login Page
-- User Profile
-- Chat List
-- Chat Screen
-- Notifications
-- Messages
-- Online Offline
-- Status Management
-## Explanation
-- Install Docker and Made sure it was running properly
-- Install rethinkDB which is basically firebase copy
-- then created two directories
-  - Model
-    - First Step is to register? We would need a User Model which is basically a schema of the first table in our db
-    - User Model has parameters like online,id,photo,username,is active
-  - Services
-    - User Service Contract - An abstract class we make sure that if the backend changes for example it changes to firebase we have some ground rules
-    - User Service Implementation - A service which implements the contract
-    - Connect and Disconnect and isActive
-    - To connect we would want a user which should like be inserted 
-    - disconnect means we want it to be offline
-    - isactive is to check how many users currently in the database are online
-  - Then we created a test folder to implement some tests on our db
-    - Helpers -  Its a class that basically implements the db helper functions like create db and clean db
-    - User Service Test - first we maintained a connection and then created a db  using helper class
-    - After creation of the db, we then proceed to test the service we created which obviously requires an active connection and also an instance of rThinkDB
-## Episode 2 of Youtube tutorial
-### Explanation
-- First we created a Message model class for the message table schema
-  - The Message class represents a message sent between users in the chat application. It includes attributes such as the sender (from), recipient (to), timestamp (timestamp), and contents (contents) of the message. The toJson() method converts the message object into a JSON format for storage or transmission. The fromJson() factory method creates a Message object from a JSON map, allowing for easy serialization and deserialization.
-- Then we created Message Service Contract File
-  - In this file we included what we aim to do we messages like ``send``,``messages stream`` intitally 
-  - we defined two methods for each feature
-  - Then we created a Message Service Implementation file to define the function of these methods
-  - The send method needs a connection to the db, a instance of rethinkDB, and controller to get the strema and changefeed to check the changes in the feed.
-  - In the messages method, we take the activeUser we have to get the feed for and start the stream using _startReceievingMessages using the activeUser
-    - The startReceivingMessages service we go inside the table messages and filter where the to is pointed to the activeUser and then check for the new messages using include_inital true and then run the connection
-    -  This subscription returns a cursor, which we convert into a stream using asStream(). We then cast this stream to a Feed type, as RethinkDB streams are typically of this type. We listen to the stream for incoming events, which represent changes in the table data. When a new message is received (feedData['new_val']), we convert it into a Message object using the _messageFromFeed method and add it to the _controller stream for further processing. Additionally, we remove the delivered message from the table to ensure that it is not processed again in the future.
-  - In the send method, we take a message that we need to send and insert into the messages table and return the result
-- Then we updated helper class
-  - we `await r.tableCreate('messages').run(connection).catchError((err) => {});` line to the createDb and cleanDB method to delete the messages
-- Then we wrote tests for each method metioned in the contract `send` and `messages`
-- The send message test is checked by making an instance of Messages and testing the return value
-- The stream subscribe method is checked by using user2 feed and listen to its feedchanges and we expect that the stream changes will show that message.to param have user2.id and is the message id param is not empty 
-- after that we send the two messages
+# Chatify
 
-## Episode 3 of Youtube tutorial
-### Explanation
-- We created a service `encryption`
-- `Encryption` --> was to encrypt data incoming and outgoing just like whatsapp we encrypt our data so that it doesnt saves on the server
-  - For that we created two methods`encrypt` and `decrypt`
-  - Encrypt data uses base64 and implemented this method inside send 
-  - Decrypt data decrypts base64 message into plain text we used it insdie the message service where we are subscribing to the stream
-## Episode 3 of Youtube tutorial
-### Explanation
-- We created two services 1 `Receipt` 2  `Typing Notification` 
-- `Receipt` --> Its status of the message whether its  sent, delivered, read 
-  - we created a model class depicting the table schema and having enum to ensure the status remain constant 
-  - we then created service which had the methods to insert the status for that message and check the incoming status for message
--  `Typing Notification`  --> to give out typing notiifcation for the user whether it is `started` or `stopped`
-  - Similarly to receipt we created exact same notification
+**Chatify** is a comprehensive chat application developed as a learning project to explore the fundamentals of building a real-time messaging platform. The application features various components typical of a modern chat app, including user authentication, chat interfaces, status management, notifications, and more. This project aims to demonstrate how to create a robust backend using Docker, RethinkDB, and structured service implementation patterns, while also covering aspects such as encryption and typing notifications.
+
+## Features
+
+- **User Authentication**: A secure login page allowing users to authenticate and gain access to the application.
+- **User Profile**: Each user has a customizable profile, including an avatar, username, and online status.
+- **Chat List**: A list displaying all available chats for the authenticated user.
+- **Chat Screen**: A dynamic screen for active conversations, supporting real-time messaging.
+- **Notifications**: Notifications for incoming messages and user activities.
+- **Status Management**: Tracks users' online/offline status.
+- **Messages**: Real-time messaging with encryption for secure communication.
+- **Typing Notifications**: Indicators showing when users are typing.
+
+## Project Structure and Development Phases
+
+### Phase 1: Initial Setup and User Management
+
+1. **Docker and RethinkDB Setup**
+   - Installed Docker and ensured it was running correctly to provide an isolated environment for development.
+   - Installed RethinkDB, an open-source NoSQL database similar to Firebase, to manage real-time data.
+
+2. **Directory Structure Creation**
+   - **Model Directory**:
+     - Developed the `User` model representing the schema for the users' table in RethinkDB, with attributes such as `online`, `id`, `photo`, `username`, and `isActive`.
+   - **Services Directory**:
+     - Created a `UserServiceContract`, an abstract class defining the rules and behaviors for user-related services, ensuring flexibility in backend changes (e.g., switching from RethinkDB to Firebase).
+     - Implemented `UserServiceImplementation`, which provides concrete methods for user-related operations such as `connect`, `disconnect`, and `isActive`. These methods manage user connections, handle disconnections, and check the number of online users.
+
+3. **Testing Infrastructure**
+   - Developed a test folder to validate database operations.
+   - **Helpers Class**: Contains utility functions for database operations, such as creating and cleaning up the database.
+   - **User Service Test**: Established a connection to RethinkDB, created a test database using the helper class, and tested the user service implementation to ensure robust functionality.
+
+### Phase 2: Messaging Functionality
+
+1. **Message Model and Services**
+   - Created a `Message` model class to define the schema for the messages table, including attributes like `from`, `to`, `timestamp`, and `contents`.
+   - Designed the `MessageServiceContract` to outline functionalities like sending messages and streaming message feeds.
+   - Implemented `MessageServiceImplementation`:
+     - **Send Method**: Inserts messages into the messages table and manages real-time notifications for the recipients.
+     - **Messages Stream**: Initiates a stream of messages for the active user using a change feed to monitor updates in real-time.
+     - **Start Receiving Messages**: Filters messages directed to the active user and streams them, handling new messages and marking them as delivered.
+
+2. **Testing Messaging Services**
+   - Updated the helpers class to manage the messages table, including creation and cleanup methods.
+   - Wrote tests for both the `send` and `messages` methods:
+     - **Send Message Test**: Verifies that messages are correctly inserted into the database.
+     - **Stream Subscribe Test**: Ensures that the message stream correctly updates based on changes in the database, confirming real-time functionality.
+
+### Phase 3: Advanced Features
+
+1. **Encryption Service**
+   - Developed an `Encryption` service to secure data communication, similar to WhatsApp's encryption:
+     - **Encrypt Method**: Utilizes base64 encoding to encrypt outgoing messages.
+     - **Decrypt Method**: Decodes incoming messages back to plaintext, ensuring data integrity and security during transmission.
+
+2. **Receipt and Typing Notification Services**
+   - **Receipt Service**: Tracks the status of messages (sent, delivered, read) with a model class defining the schema and an enumeration for status consistency.
+   - **Typing Notification Service**: Manages typing indicators (started, stopped), alerting users when others are typing in the chat.
+
+## Getting Started
+
+To get started with Chatify, follow these steps:
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/your-username/chatify.git
+   cd chatify
+   ```
+
+2. **Install Dependencies**:
+   Make sure Docker is installed and running. Set up RethinkDB following the installation instructions on the official site.
+
+3. **Run the Application**:
+   Start the Docker containers and initialize the backend services as per the Docker and RethinkDB setup.
+
+4. **Run Tests**:
+   To ensure everything is set up correctly, run the tests provided in the `test` folder.
+
+## Conclusion
+
+Chatify is designed as an educational project to explore real-time chat application development using modern technologies. By implementing various features and services, this project demonstrates the process of building a robust and scalable application, focusing on secure communication, real-time data handling, and a modular architecture.
+
+Feel free to explore, contribute, and adapt Chatify for your needs!
